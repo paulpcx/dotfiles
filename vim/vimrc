@@ -1,0 +1,500 @@
+""""""""""""""""""""""""""""""
+" => Pathogen 
+""""""""""""""""""""""""""""""
+" Must be placed on top to work
+call pathogen#infect()
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Sets how many lines of history VIM has to remember
+set history=300
+
+" Enable filetype plugin
+filetype plugin on
+filetype indent on
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" set linewrapping
+set wrap linebreak nolist
+
+" tabs
+set tabstop=4
+set shiftwidth=4
+set noexpandtab
+
+
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+let g:mapleader = ","
+
+" Fast saving
+nmap <leader>s :w!<cr>
+" Fast reload
+nmap <leader>r :e!<cr>
+
+" Source file if it's a vimscript
+autocmd! bufwritepost *.vim source %
+
+" TODO: Change this when transfering
+" Fast editing of the .vimrc
+if has("win32") || has("win64")
+	map <leader>ev :e! $VIM/_vimrc<cr>
+else
+	map <leader>ev :e! ~/.vim/vimrc<cr>
+endif
+" When vimrc is edited, reload it
+if has("win32") || has("win64")
+	autocmd! bufwritepost vimrc source $VIM/_vimrc
+else
+	autocmd! bufwritepost vimrc source ~/.vimrc
+endif
+
+" Timestamp
+nmap <F5> a<C-R>=strftime("%Y-%m-%d %I:%M:%S")<CR><Esc>
+imap <F5> <C-R>=strftime("%Y-%m-%d %I:%M:%S")<CR>
+
+" Toggle 80 column marker
+nnoremap <F2> :call ToggleColorColumn()<CR>
+
+func! ToggleColorColumn()
+	if &colorcolumn
+		exec ':set colorcolumn=0'
+		echo '80 column marker off'
+	else
+		exec ':set colorcolumn=80'
+		echo '80 column marker on'
+	endif	
+endfunc
+
+" Press jj to exit insert mode
+imap jj <Esc>
+
+" Press ,-Enter in normal mode to add new lines above and below
+nnoremap <leader><CR> O<Esc>jo<Esc>k
+
+" map Esc to clear highlights in normal mode
+"nnoremap <Esc> :noh<CR>
+
+" <</>> to indent/unindent in insert mode
+inoremap << <Esc><<gi
+inoremap >> <Esc>>>gi
+
+" Yank text to the OS X clipboard
+noremap <leader>y "*y
+noremap <leader>yy "*Y
+" Preserve indentation while pasting text from the OS X clipboard
+noremap <leader>p :set paste<CR><Bar>:put *<CR><Bar>:set nopaste<CR>
+
+" Remove all trailing whitespace
+function! CleanWhitespace()
+	let _s = @/
+	execute ":%s/\s\+$//e"
+	let @/ = _s
+	execute ":nohl"
+endfunction
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => VIM user interface
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set 7 lines to the curors - when moving vertical..
+
+set so=3
+
+set wildmenu "Turn on WiLd menu
+
+set ruler "Always show current position
+
+set cmdheight=2 "The commandbar height
+
+set hid "Change buffer - without saving
+
+" Set backspace config
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+set ignorecase "Ignore case when searching
+
+set hlsearch "Highlight search things
+
+set incsearch "Make search act like search in modern browsers
+
+set magic "Set magic on, for regular expressions
+
+set showmatch "Show matching bracets when text indicator is over them
+set mat=2 "How many tenths of a second to blink
+set cul             "highlight current line
+
+" No sound on errors
+set noerrorbells
+set novisualbell
+set t_vb=
+syntax enable "Enable syntax hl
+
+" Bind <F10> to fix syntax highlighting
+noremap <F10> <Esc>:syntax sync fromstart<CR>
+inoremap <F10> <C-o>:syntax sync fromstart<CR>
+
+" "smooth scrolling" on Tab/Shift-Tab
+map <S-Space> <C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y>
+map <Space> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
+
+" hide cursor line when window is not focused
+"au WinLeave * set nocursorline
+"au WinEnter * set cursorline
+
+" set window size
+if has("gui_running")
+	set columns=84
+	set lines=60
+endif
+
+" toggle background for solarized colorscheme
+call togglebg#map("<F6>")
+" highlight 4th space (indentation guide)
+" call matchadd('TODO', '\(^\s*\)\@<=\%4v')
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Files and backups
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Turn backup off, since most stuff is in SVN, git anyway...
+set nobackup
+set nowb
+set noswapfile
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colors and Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set font according to system
+if has("win32") || has("win64")
+	set gfn=Consolas\ 11
+elseif has("macunix") || has("mac")
+	"set gfn=Droid\ Sans\ Mono:h14
+	set gfn=Menlo:h12
+	nnoremap <F12> :set gfn=Menlo:h14<CR>
+	nnoremap <F11> :set gfn=Menlo:h12<CR>
+else
+	set gfn=Droid\ Sans\ Mono\ 10
+endif
+
+if has("gui_running")
+  set guioptions-=T
+  set t_Co=256
+  set background=dark
+  if has("macunix") || has("mac")
+	  colorscheme badwolf
+	  let g:zenburn_high_Contrast = 1
+	  let g:zenburn_alternate_Visual = 1
+  else
+	  colorscheme Monokai
+  endif
+  hi colorcolumn guibg=#222222
+  set nu
+else
+  set t_Co=256
+  let g:solarized_termcolors=256
+  set background=dark
+  colorscheme solarized
+  let g:Powerline_symbols = "fancy"
+  set nu
+endif
+
+set encoding=utf8
+try
+    lang en_US
+catch
+endtry
+
+set ffs=unix,dos,mac "Default file types
+
+function! SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
+nnoremap <leader>? :call SynStack()<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Command mode related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Smart mappings on the command line
+cno $h e ~/
+cno $d e ~/Desktop/
+cno $j e ./
+cno $c e <C-\>eCurrentFileDir("e")<cr>
+
+" $q is super useful when browsing on the command line
+cno $q <C-\>eDeleteTillSlash()<cr>
+
+" Bash like keys for the command line
+cnoremap <C-A>      <Home>
+cnoremap <C-E>      <End>
+cnoremap <C-K>      <C-U>
+
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
+
+" Useful on some European keyboards
+map ½ $
+imap ½ $
+vmap ½ $
+cmap ½ $
+
+
+func! Cwd()
+  let cwd = getcwd()
+  return "e " . cwd 
+endfunc
+
+func! DeleteTillSlash()
+  let g:cmd = getcmdline()
+  if MySys() == "linux" || MySys() == "mac"
+    let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
+  else
+    let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
+  endif
+  if g:cmd == g:cmd_edited
+    if MySys() == "linux" || MySys() == "mac"
+      let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
+    else
+      let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
+    endif
+  endif   
+  return g:cmd_edited
+endfunc
+
+func! CurrentFileDir(cmd)
+  return a:cmd . " " . expand("%:p:h") . "/"
+endfunc
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Moving around, tabs and buffers
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Smart way to move btw. windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+" Close all the buffers
+map <leader>ba :1,300 bd!<cr>
+
+" Use the arrows to something usefull
+map <right> :bn<cr>
+map <left> :bp<cr>
+map <Tab> <C-^>
+
+" Tab configuration
+map <leader>tn :tabnew %<cr>
+map <leader>te :tabedit 
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove 
+
+" When pressing <leader>cd switch to the directory of the open buffer
+map <leader>cd :cd %:p:h<cr>
+
+""""""""""""""""""""""""""""""
+" => Statusline
+""""""""""""""""""""""""""""""
+" Always hide the statusline
+set laststatus=2
+
+" Format the statusline
+set statusline=\ %f%m%r%h\ %w\ FT:\ %Y\ \ CWD:\ %r%{CurDir()}%h%=Line:\ %l/%L:%c
+
+
+function! CurDir()
+    let curdir = substitute(getcwd(), '/Users/John/', "~/", "g")
+    return curdir
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Spell checking
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Pressing ,ss will toggle and untoggle spell checking
+map <leader>sc :setlocal spell!<cr>
+
+"Shortcuts using <leader>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Omni complete functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+
+""""""""""""""""""""""""""""""
+" => Python section
+""""""""""""""""""""""""""""""
+au FileType python set nocindent
+" folding
+"au FileType python set foldmethod=indent
+let python_highlight_all = 1
+au FileType python syn keyword pythonDecorator True None False self
+
+au BufNewFile,BufRead *.jinja set syntax=htmljinja
+au BufNewFile,BufRead *.mako set ft=mako
+
+au FileType python inoremap <buffer> $r return 
+au FileType python inoremap <buffer> $i import 
+au FileType python inoremap <buffer> $p print 
+au FileType python inoremap <buffer> $f #--- PH ----------------------------------------------<esc>FP2xi
+au FileType python map <buffer> <leader>1 /class 
+au FileType python map <buffer> <leader>2 /def 
+au FileType python map <buffer> <leader>C ?class 
+au FileType python map <buffer> <leader>D ?def 
+
+""""""""""""""""""""""""""""""
+" => python-mode
+""""""""""""""""""""""""""""""
+let g:pymode_run = 0
+let g:pymode_lint = 0 " I prefer syntastic
+let g:pymode_rope = 0 " wtf is rope
+
+""""""""""""""""""""""""""""""
+" => Processing section
+""""""""""""""""""""""""""""""
+au FileType processing inoremap {<CR>	{<CR>}<Esc>O
+au FileType processing silent noremap ;	<Esc>mcA;<Esc>`c
+au FileType processing inoremap (	()<Left>
+au FileType processing inoremap ()	()
+au FileType processing inoremap [	[]<Left>
+au FileType processing inoremap []	[]
+
+let g:processing_dir = "~/Documents/Processing"
+function! CreateProcessingProject(projName)
+	execute "!mkdir " . g:processing_dir . "/" . a:projName
+	execute "!mkdir " . g:processing_dir . "/" . a:projName . "/Data"
+	execute "e " . g:processing_dir . "/" . a:projName . "/" . a:projName . ".pde"
+	execute "cd %:p:h"
+endfunction
+
+""""""""""""""""""""""""""""""
+" => Java section
+""""""""""""""""""""""""""""""
+au FileType java inoremap {<CR>	{<CR>}<Esc>O
+au FileType java silent noremap ;	<Esc>mcA;<Esc>`c
+let java_comment_strings=1
+let java_highlight_java_lang_ids=1
+let java_mark_braces_in_parens_as_errors=1
+let java_highlight_all=1
+let java_highlight_debug=1
+let java_ignore_javadoc=1
+let java_highlight_java_lang_ids=1
+let java_highlight_functions="style"
+let java_minlines = 150
+
+""""""""""""""""""""""""""""""
+" => HTML, CSS, JS section
+""""""""""""""""""""""""""""""
+au BufNewFile,BufRead *.less set filetype=less
+au FileType less set syntax=less
+autocmd FileType html,xhtml,xml,htmldjango,javascript,css,less setlocal sw=2 ts=2 expandtab
+""""""""""""""""""""""""""""""
+" => Actionscript section
+""""""""""""""""""""""""""""""
+au BufNewFile,BufRead *.as set ft=actionscript
+
+""""""""""""""""""""""""""""""
+" => Ruby section
+""""""""""""""""""""""""""""""
+autocmd FileType rb, erb setlocal sw=2 ts=2 expandtab
+
+""""""""""""""""""""""""""""""
+" => Clojure section
+""""""""""""""""""""""""""""""
+" Automatically determine indenting using fuzzy matching. e.g. the a line starting '(with-'
+" will be indented two spaces.
+let vimclojure#FuzzyIndent=1
+
+" Highlight built-in functions from clojure.core and friends
+let vimclojure#HighlightBuiltins=1
+
+" Highlight functions from contrib
+let vimclojure#HighlightContrib=1
+
+" As new symbols are identified using VimClojure's dynamic features,
+" automatically highlight them.
+let vimclojure#DynamicHighlighting=1
+
+" Color parens so they're easier to match visually
+let vimclojure#ParenRainbow=1
+
+" Yes, I want nailgun support
+" let vimclojure#WantNailgun = 1
+
+" Full path to the nailgun client
+let vimclojure#NailgunClient = "/usr/local/bin/ng"
+au FileType clojure set foldmethod=indent
+
+""""""""""""""""""""""""""""""
+" => Vim section
+""""""""""""""""""""""""""""""
+au FileType vim setlocal shiftwidth=2 tabstop=2 expandtab
+"
+""""""""""""""""""""""""""""""
+" => Plugins
+""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""
+" => Tagbar
+""""""""""""""""""""""""""""""
+nmap <F4> :TagbarToggle<CR><CR>
+let Tlist_Ctags_Cmd = "/usr/bin/ctags"
+
+""""""""""""""""""""""""""""""
+" => NERDTree
+""""""""""""""""""""""""""""""
+map <F3> :NERDTreeToggle<CR>
+
+""""""""""""""""""""""""""""""
+" => MiniBufExpl 
+""""""""""""""""""""""""""""""
+let g:miniBufExplMapWindowNavVim = 1 
+let g:miniBufExplMapWindowNavArrows = 1 
+let g:miniBufExplMapCTabSwitchBufs = 1 
+let g:miniBufExplModSelTarget = 1
+
+""""""""""""""""""""""""""""""
+" => Bclose 
+""""""""""""""""""""""""""""""
+nnoremap <silent> <Leader>q :Bclose<CR>
+nnoremap <silent> <Leader>Q :Bclose!<CR>
+
+""""""""""""""""""""""""""""""
+" => CtrlP 
+""""""""""""""""""""""""""""""
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+  \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$',
+  \ }
+
+let g:ctrlp_open_new_file = 'r'
+
+""""""""""""""""""""""""""""""
+" => Syntastic 
+""""""""""""""""""""""""""""""
+nnoremap <leader>! :Errors<CR>
+nnoremap <leader>/ :SyntasticCheck<CR>
+
+" signs
+let g:syntastic_error_symbol = 'E'
+let g:syntastic_warning_symbol = 'W'
+let g:syntastic_style_error_symbol = '$'
+let g:syntastic_style_warning_symbol = '#'
+
+let g:syntastic_auto_loc_list = 2
+let g:syntastic_quiet_warnings = 1
+
+let g:syntastic_mode_map = { 'mode': 'passive',
+						   \ 'active_filetypes': [],
+						   \ 'passive_filetypes': [] }
+
+set nocursorline
+set listchars=eol:¬,tab:►-,trail:.,extends:>,precedes:<,nbsp:_
