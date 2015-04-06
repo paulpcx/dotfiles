@@ -9,3 +9,8 @@
     ln -s ~/.kindmenu/dotfiles/tmux.conf ~/.tmux.conf
     cd ~
     ls -al
+
+## Remove me
+
+#### Lock Screen CTRL + S
+#### Unlock Screen CTRL + Q
