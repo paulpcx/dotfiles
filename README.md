@@ -1,4 +1,5 @@
-## How to install
+## Installation
+### curl https://raw.github.com/paulpcx/dotfiles/master/README.md | sh
 
     mkdir ~/.kindmenu
     cd ~/.kindmenu
@@ -8,3 +9,8 @@
     ln -s ~/.kindmenu/dotfiles/tmux.conf ~/.tmux.conf
     cd ~
     ls -al
+
+## Remove me
+
+#### Lock Screen CTRL + S
+#### Unlock Screen CTRL + Q
