@@ -182,7 +182,7 @@ endif
 if has("gui_running")
   set guioptions-=T
   set t_Co=256
-  set background=dark
+  set background=light
   if has("macunix") || has("mac")
 	  colorscheme badwolf
 	  let g:zenburn_high_Contrast = 1
@@ -498,3 +498,4 @@ let g:syntastic_mode_map = { 'mode': 'passive',
 
 set nocursorline
 set listchars=eol:¬,tab:►-,trail:.,extends:>,precedes:<,nbsp:_
+set bg=dark
