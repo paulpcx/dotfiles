@@ -1,5 +1,5 @@
 ## Installation
-### curl https://raw.github.com/paulpcx/dotfiles/master/README.md | sh
+### curl https://raw.githubusercontent.com/paulpcx/dotfiles/master/README.md| sh
 
     mkdir ~/.kindmenu
     cd ~/.kindmenu
